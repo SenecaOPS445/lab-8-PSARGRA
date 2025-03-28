@@ -1,0 +1,45 @@
+---
+- name: Configure OPS445 VM
+  hosts: ops445
+  user: student
+  become: yes
+  vars:
+    seneca_id: psargra
+
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: latest
+
+    - name: Install EPEL repo
+      yum:
+        name: epel-release
+        state: present
+
+    - name: Remove tree package
+      yum:
+        name: tree
+        state: absent
+
+    - name: Set hostname to Seneca ID
+      hostname:
+        name: "{{ seneca_id }}"
+
+    - name: Create new user with sudo access
+      user:
+        name: "{{ seneca_id }}"
+        groups: wheel
+        append: yes
+        shell: /bin/bash
+        state: present
+
+    - name: Create lab directories
+      file:
+        path: "/home/{{ seneca_id }}/ops445/lab{{ item }}"
+        state: directory
+        owner: "{{ seneca_id }}"
+        group: "{{ seneca_id }}"
+        mode: '0755'
+      with_sequence: start=1 end=8 format=%d
+

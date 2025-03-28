@@ -1,0 +1,3 @@
+[ops445]
+myvm ansible_host=myvmlab.senecapolytechnic.ca ansible_port=7317 ansible_user=student ansible_ssh_pass='9}HhM{pkl1'
+
